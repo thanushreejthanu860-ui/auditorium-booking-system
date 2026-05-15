@@ -1,0 +1,187 @@
+{
+  "info": {
+    "name": "Auditorium Booking System",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "base_url", "value": "http://localhost:3000" },
+    { "key": "token",    "value": "" }
+  ],
+  "item": [
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Login",
+          "request": {
+            "method": "POST",
+            "url": "{{base_url}}/api/auth/login",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"email\": \"admin@college.edu\",\n  \"password\": \"admin123\"\n}" }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Users",
+      "item": [
+        {
+          "name": "Get All Users",
+          "request": {
+            "method": "GET",
+            "url": "{{base_url}}/api/users",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }]
+          }
+        },
+        {
+          "name": "Create User",
+          "request": {
+            "method": "POST",
+            "url": "{{base_url}}/api/users",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" },
+              { "key": "Content-Type",  "value": "application/json" }
+            ],
+            "body": { "mode": "raw", "raw": "{\n  \"name\": \"HOD Maths\",\n  \"email\": \"hod.maths@college.edu\",\n  \"role\": \"HOD\",\n  \"department\": \"Mathematics\"\n}" }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Bookings",
+      "item": [
+        {
+          "name": "Create Booking (HOD)",
+          "request": {
+            "method": "POST",
+            "url": "{{base_url}}/api/bookings",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" },
+              { "key": "Content-Type",  "value": "application/json" }
+            ],
+            "body": { "mode": "raw", "raw": "{\n  \"event_name\": \"Annual Tech Fest\",\n  \"date\": \"2025-08-15\",\n  \"start_time\": \"10:00\",\n  \"end_time\": \"13:00\",\n  \"purpose\": \"Annual department tech event\",\n  \"audience_size\": 300,\n  \"equipment\": [\"projector\", \"mic\"],\n  \"media\": [\"banner\"]\n}" }
+          }
+        },
+        {
+          "name": "Get All Bookings",
+          "request": {
+            "method": "GET",
+            "url": "{{base_url}}/api/bookings",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }]
+          }
+        },
+        {
+          "name": "Get All Bookings (filter by status)",
+          "request": {
+            "method": "GET",
+            "url": "{{base_url}}/api/bookings?status=pending_admin",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }]
+          }
+        },
+        {
+          "name": "Get My Bookings (HOD)",
+          "request": {
+            "method": "GET",
+            "url": "{{base_url}}/api/bookings/my",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }]
+          }
+        },
+        {
+          "name": "Forward Booking (Admin)",
+          "request": {
+            "method": "PATCH",
+            "url": "{{base_url}}/api/bookings/1/forward",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }]
+          }
+        },
+        {
+          "name": "Approve Booking (Principal)",
+          "request": {
+            "method": "PATCH",
+            "url": "{{base_url}}/api/bookings/1/approve",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }]
+          }
+        },
+        {
+          "name": "Reject Booking (Admin or Principal)",
+          "request": {
+            "method": "PATCH",
+            "url": "{{base_url}}/api/bookings/1/reject",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }]
+          }
+        },
+        {
+          "name": "Upload File to Booking (HOD)",
+          "request": {
+            "method": "POST",
+            "url": "{{base_url}}/api/bookings/1/upload",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "body": {
+              "mode": "formdata",
+              "formdata": [{ "key": "file", "type": "file", "src": "" }]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Display",
+      "item": [
+        {
+          "name": "Today's Events (Public)",
+          "request": {
+            "method": "GET",
+            "url": "{{base_url}}/api/display/today"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Calendar",
+      "item": [
+        {
+          "name": "Get Calendar",
+          "request": {
+            "method": "GET",
+            "url": "{{base_url}}/api/calendar",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Notifications",
+      "item": [
+        {
+          "name": "Get My Notifications",
+          "request": {
+            "method": "GET",
+            "url": "{{base_url}}/api/notifications/my",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }]
+          }
+        },
+        {
+          "name": "Mark Notification as Read",
+          "request": {
+            "method": "PATCH",
+            "url": "{{base_url}}/api/notifications/1/read",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Dashboard",
+      "item": [
+        {
+          "name": "Get Stats",
+          "request": {
+            "method": "GET",
+            "url": "{{base_url}}/api/dashboard/stats",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }]
+          }
+        }
+      ]
+    }
+  ]
+}
