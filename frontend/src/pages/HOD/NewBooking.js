@@ -46,31 +46,19 @@ export default function NewBooking() {
     if (!validate()) return;
     setLoading(true);
     try {
-      await api.post('/api/bookings', {
-        ...form,
-        audience_size: Number(form.audience_size),
-      });
+      await api.post('/api/bookings', { ...form, audience_size: Number(form.audience_size) });
       toast.success('Booking submitted successfully!');
       navigate('/bookings/my');
     } catch (err) {
-      const msg = err.response?.data?.message || 'Submission failed.';
       if (err.response?.status === 409) {
         toast.error('Time slot conflict. Please choose a different time.');
       } else {
-        toast.error(msg);
+        toast.error(err.response?.data?.message || 'Submission failed.');
       }
     } finally {
       setLoading(false);
     }
   };
-
-  const F = ({ name, label, children }) => (
-    <div className="form-group">
-      <label className="form-label">{label} <span className="required">*</span></label>
-      {children}
-      {errors[name] && <div className="form-error">{errors[name]}</div>}
-    </div>
-  );
 
   return (
     <div>
@@ -81,16 +69,21 @@ export default function NewBooking() {
       <div className="card" style={{ maxWidth: 700 }}>
         <div className="card-body">
           <form onSubmit={handleSubmit}>
-            <F name="event_name" label="Event Name">
+
+            <div className="form-group">
+              <label className="form-label">Event Name <span className="required">*</span></label>
               <input className={`form-control ${errors.event_name ? 'error' : ''}`} value={form.event_name}
                 onChange={e => set('event_name', e.target.value)} placeholder="Annual Tech Fest 2025" />
-            </F>
+              {errors.event_name && <div className="form-error">{errors.event_name}</div>}
+            </div>
 
             <div className="form-row">
-              <F name="date" label="Date">
+              <div className="form-group">
+                <label className="form-label">Date <span className="required">*</span></label>
                 <input type="date" className={`form-control ${errors.date ? 'error' : ''}`}
                   value={form.date} min={today} onChange={e => set('date', e.target.value)} />
-              </F>
+                {errors.date && <div className="form-error">{errors.date}</div>}
+              </div>
               <div className="form-group">
                 <label className="form-label">Audience Size <span className="required">*</span></label>
                 <input type="number" className={`form-control ${errors.audience_size ? 'error' : ''}`}
@@ -100,21 +93,27 @@ export default function NewBooking() {
             </div>
 
             <div className="form-row">
-              <F name="start_time" label="Start Time (min 09:00)">
+              <div className="form-group">
+                <label className="form-label">Start Time (min 09:00) <span className="required">*</span></label>
                 <input type="time" className={`form-control ${errors.start_time ? 'error' : ''}`}
                   value={form.start_time} min="09:00" max="17:00" onChange={e => set('start_time', e.target.value)} />
-              </F>
-              <F name="end_time" label="End Time (max 17:00)">
+                {errors.start_time && <div className="form-error">{errors.start_time}</div>}
+              </div>
+              <div className="form-group">
+                <label className="form-label">End Time (max 17:00) <span className="required">*</span></label>
                 <input type="time" className={`form-control ${errors.end_time ? 'error' : ''}`}
                   value={form.end_time} min="09:00" max="17:00" onChange={e => set('end_time', e.target.value)} />
-              </F>
+                {errors.end_time && <div className="form-error">{errors.end_time}</div>}
+              </div>
             </div>
 
-            <F name="purpose" label="Purpose">
+            <div className="form-group">
+              <label className="form-label">Purpose <span className="required">*</span></label>
               <textarea className={`form-control ${errors.purpose ? 'error' : ''}`} rows={3}
                 value={form.purpose} onChange={e => set('purpose', e.target.value)}
                 placeholder="Describe the purpose of this event..." />
-            </F>
+              {errors.purpose && <div className="form-error">{errors.purpose}</div>}
+            </div>
 
             <div className="form-group">
               <label className="form-label">Equipment Required</label>
