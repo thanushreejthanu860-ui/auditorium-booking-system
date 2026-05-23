@@ -56,12 +56,8 @@ export default function MyBookings() {
             {b.purpose && <div style={{ fontSize: 13, color: 'var(--gray-600)' }}>{b.purpose}</div>}
             {(b.equipment || b.media) && (
               <div style={{ marginTop: 8, fontSize: 12, color: 'var(--gray-500)' }}>
-                {b.equipment && JSON.parse(b.equipment).length > 0 && (
-                  <span>🔧 {JSON.parse(b.equipment).join(', ')} </span>
-                )}
-                {b.media && JSON.parse(b.media).length > 0 && (
-                  <span>🎥 {JSON.parse(b.media).join(', ')}</span>
-                )}
+                {(() => { const eq = Array.isArray(b.equipment) ? b.equipment : JSON.parse(b.equipment || '[]'); return eq.length > 0 && <span>🔧 {eq.join(', ')} </span>; })()}
+                {(() => { const md = Array.isArray(b.media) ? b.media : JSON.parse(b.media || '[]'); return md.length > 0 && <span>🎥 {md.join(', ')}</span>; })()}
               </div>
             )}
             {b.status === 'approved' && (

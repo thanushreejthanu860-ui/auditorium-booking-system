@@ -77,18 +77,8 @@ export default function FinalApproval() {
                 <span>{b.purpose}</span>
               </div>
             )}
-            {b.equipment && JSON.parse(b.equipment).length > 0 && (
-              <div className="booking-detail-row">
-                <span className="detail-label">Equipment:</span>
-                <span>{JSON.parse(b.equipment).join(', ')}</span>
-              </div>
-            )}
-            {b.media && JSON.parse(b.media).length > 0 && (
-              <div className="booking-detail-row">
-                <span className="detail-label">Media:</span>
-                <span>{JSON.parse(b.media).join(', ')}</span>
-              </div>
-            )}
+            {(() => { const eq = Array.isArray(b.equipment) ? b.equipment : JSON.parse(b.equipment || '[]'); return eq.length > 0 && <div className="booking-detail-row"><span className="detail-label">Equipment:</span><span>{eq.join(', ')}</span></div>; })()}
+            {(() => { const md = Array.isArray(b.media) ? b.media : JSON.parse(b.media || '[]'); return md.length > 0 && <div className="booking-detail-row"><span className="detail-label">Media:</span><span>{md.join(', ')}</span></div>; })()}
             <div className="booking-card-actions">
               <button
                 className="btn btn-success btn-sm"
