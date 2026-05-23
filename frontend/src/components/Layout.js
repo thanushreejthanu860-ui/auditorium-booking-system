@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { NavLink, useNavigate } from 'react-router-dom';
+import { NavLink, useNavigate, Outlet } from 'react-router-dom';
 import { getAuth, clearAuth } from '../utils/auth';
 import api from '../utils/api';
 
@@ -23,7 +23,7 @@ const NAV = {
   ],
 };
 
-export default function Layout({ children }) {
+export default function Layout() {
   const { role, name } = getAuth();
   const navigate = useNavigate();
   const [notifications, setNotifications] = useState([]);
@@ -105,7 +105,7 @@ export default function Layout({ children }) {
       </header>
 
       <main className="main-content">
-        <div className="page">{children}</div>
+        <div className="page"><Outlet /></div>
       </main>
     </div>
   );

@@ -2,7 +2,7 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
 import './styles/global.css';
 
-import ProtectedRoute from './components/ProtectedRoute';
+import { isAuthenticated, getAuth } from './utils/auth';
 import Layout from './components/Layout';
 
 import Login from './pages/Shared/Login';
@@ -20,12 +20,11 @@ import FinalApproval from './pages/Principal/FinalApproval';
 
 import LEDDisplay from './pages/LEDDisplay';
 
-function WithLayout({ children }) {
-  return (
-    <ProtectedRoute>
-      <Layout>{children}</Layout>
-    </ProtectedRoute>
-  );
+function ProtectedLayout({ roles }) {
+  if (!isAuthenticated()) return <Navigate to="/login" replace />;
+  const { role } = getAuth();
+  if (roles && !roles.includes(role)) return <Navigate to="/dashboard" replace />;
+  return <Layout />;
 }
 
 export default function App() {
@@ -36,20 +35,25 @@ export default function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/display" element={<LEDDisplay />} />
 
-        <Route path="/dashboard" element={<WithLayout><Dashboard /></WithLayout>} />
-        <Route path="/calendar" element={<WithLayout><Calendar /></WithLayout>} />
+        <Route element={<ProtectedLayout />}>
+          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/calendar" element={<Calendar />} />
+        </Route>
 
-        {/* HOD */}
-        <Route path="/bookings/new" element={<WithLayout><ProtectedRoute roles={['HOD']}><NewBooking /></ProtectedRoute></WithLayout>} />
-        <Route path="/bookings/my" element={<WithLayout><ProtectedRoute roles={['HOD']}><MyBookings /></ProtectedRoute></WithLayout>} />
-        <Route path="/bookings/:id/upload" element={<WithLayout><ProtectedRoute roles={['HOD']}><LEDUpload /></ProtectedRoute></WithLayout>} />
+        <Route element={<ProtectedLayout roles={['HOD']} />}>
+          <Route path="/bookings/new" element={<NewBooking />} />
+          <Route path="/bookings/my" element={<MyBookings />} />
+          <Route path="/bookings/:id/upload" element={<LEDUpload />} />
+        </Route>
 
-        {/* Admin */}
-        <Route path="/admin/review" element={<WithLayout><ProtectedRoute roles={['Admin']}><ReviewRequests /></ProtectedRoute></WithLayout>} />
-        <Route path="/admin/users" element={<WithLayout><ProtectedRoute roles={['Admin']}><ManageUsers /></ProtectedRoute></WithLayout>} />
+        <Route element={<ProtectedLayout roles={['Admin']} />}>
+          <Route path="/admin/review" element={<ReviewRequests />} />
+          <Route path="/admin/users" element={<ManageUsers />} />
+        </Route>
 
-        {/* Principal */}
-        <Route path="/principal/approvals" element={<WithLayout><ProtectedRoute roles={['Principal']}><FinalApproval /></ProtectedRoute></WithLayout>} />
+        <Route element={<ProtectedLayout roles={['Principal']} />}>
+          <Route path="/principal/approvals" element={<FinalApproval />} />
+        </Route>
 
         <Route path="/" element={<Navigate to="/dashboard" replace />} />
         <Route path="*" element={<Navigate to="/dashboard" replace />} />
