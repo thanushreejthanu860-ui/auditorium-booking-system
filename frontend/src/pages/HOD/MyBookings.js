@@ -17,6 +17,8 @@ const STATUS_LABEL = {
   rejected: 'Rejected',
 };
 
+const parse = (val) => Array.isArray(val) ? val : JSON.parse(val || '[]');
+
 export default function MyBookings() {
   const [bookings, setBookings] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -41,38 +43,38 @@ export default function MyBookings() {
           <p>No bookings yet. Create your first booking!</p>
         </div>
       ) : (
-        bookings.map(b => (
-          <div key={b.id} className="booking-card">
-            <div className="booking-card-header">
-              <div className="booking-card-title">{b.event_name}</div>
-              <span className={`badge ${STATUS_BADGE[b.status]}`}>{STATUS_LABEL[b.status]}</span>
-            </div>
-            <div className="booking-card-meta">
-              <span>📅 {b.date}</span>
-              <span>🕐 {b.start_time} – {b.end_time}</span>
-              {b.audience_size && <span>👥 {b.audience_size} attendees</span>}
-              <span>🕒 Submitted {new Date(b.created_at).toLocaleDateString()}</span>
-            </div>
-            {b.purpose && <div style={{ fontSize: 13, color: 'var(--gray-600)' }}>{b.purpose}</div>}
-            {(b.equipment || b.media) && (
-              <div style={{ marginTop: 8, fontSize: 12, color: 'var(--gray-500)' }}>
-                {b.equipment && JSON.parse(b.equipment).length > 0 && (
-                  <span>🔧 {JSON.parse(b.equipment).join(', ')} </span>
-                )}
-                {b.media && JSON.parse(b.media).length > 0 && (
-                  <span>🎥 {JSON.parse(b.media).join(', ')}</span>
-                )}
+        bookings.map(b => {
+          const eq = parse(b.equipment);
+          const md = parse(b.media);
+          return (
+            <div key={b.id} className="booking-card">
+              <div className="booking-card-header">
+                <div className="booking-card-title">{b.event_name}</div>
+                <span className={`badge ${STATUS_BADGE[b.status]}`}>{STATUS_LABEL[b.status]}</span>
               </div>
-            )}
-            {b.status === 'approved' && (
-              <div className="booking-card-actions">
-                <button className="btn btn-primary btn-sm" onClick={() => navigate(`/bookings/${b.id}/upload`)}>
-                  📤 Upload LED Content
-                </button>
+              <div className="booking-card-meta">
+                <span>📅 {b.date}</span>
+                <span>🕐 {b.start_time} – {b.end_time}</span>
+                {b.audience_size && <span>👥 {b.audience_size} attendees</span>}
+                <span>🕒 Submitted {new Date(b.created_at).toLocaleDateString()}</span>
               </div>
-            )}
-          </div>
-        ))
+              {b.purpose && <div style={{ fontSize: 13, color: 'var(--gray-600)' }}>{b.purpose}</div>}
+              {(eq.length > 0 || md.length > 0) && (
+                <div style={{ marginTop: 8, fontSize: 12, color: 'var(--gray-500)' }}>
+                  {eq.length > 0 && <span>🔧 {eq.join(', ')} </span>}
+                  {md.length > 0 && <span>🎥 {md.join(', ')}</span>}
+                </div>
+              )}
+              {b.status === 'approved' && (
+                <div className="booking-card-actions">
+                  <button className="btn btn-primary btn-sm" onClick={() => navigate(`/bookings/${b.id}/upload`)}>
+                    📤 Upload LED Content
+                  </button>
+                </div>
+              )}
+            </div>
+          );
+        })
       )}
     </div>
   );
