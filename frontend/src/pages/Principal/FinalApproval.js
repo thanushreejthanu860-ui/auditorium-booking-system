@@ -3,6 +3,8 @@ import toast from 'react-hot-toast';
 import api from '../../utils/api';
 import Spinner from '../../components/Spinner';
 
+const parse = (val) => Array.isArray(val) ? val : JSON.parse(val || '[]');
+
 export default function FinalApproval() {
   const [bookings, setBookings] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -56,47 +58,53 @@ export default function FinalApproval() {
           <p>No pending approvals. All done!</p>
         </div>
       ) : (
-        bookings.map(b => (
-          <div key={b.id} className="booking-card">
-            <div className="booking-card-header">
-              <div>
-                <div className="booking-card-title">{b.event_name}</div>
-                <span className="verified-label" style={{ marginTop: 4 }}>✓ Verified by Admin</span>
+        bookings.map(b => {
+          const eq = parse(b.equipment);
+          const md = parse(b.media);
+          return (
+            <div key={b.id} className="booking-card">
+              <div className="booking-card-header">
+                <div>
+                  <div className="booking-card-title">{b.event_name}</div>
+                  <span className="verified-label" style={{ marginTop: 4 }}>✓ Verified by Admin</span>
+                </div>
+                <span className="badge badge-pending-principal">Pending Principal</span>
               </div>
-              <span className="badge badge-pending-principal">Pending Principal</span>
-            </div>
-            <div className="booking-card-meta">
-              <span>📅 {b.date}</span>
-              <span>🕐 {b.start_time} – {b.end_time}</span>
-              {b.audience_size && <span>👥 {b.audience_size} attendees</span>}
-              <span>🕒 {new Date(b.created_at).toLocaleDateString()}</span>
-            </div>
-            {b.purpose && (
-              <div className="booking-detail-row">
-                <span className="detail-label">Purpose:</span>
-                <span>{b.purpose}</span>
+              <div className="booking-card-meta">
+                <span>📅 {b.date}</span>
+                <span>🕐 {b.start_time} – {b.end_time}</span>
+                {b.audience_size && <span>👥 {b.audience_size} attendees</span>}
+                <span>🕒 {new Date(b.created_at).toLocaleDateString()}</span>
               </div>
-            )}
-            {(() => { const eq = Array.isArray(b.equipment) ? b.equipment : JSON.parse(b.equipment || '[]'); return eq.length > 0 && <div className="booking-detail-row"><span className="detail-label">Equipment:</span><span>{eq.join(', ')}</span></div>; })()}
-            {(() => { const md = Array.isArray(b.media) ? b.media : JSON.parse(b.media || '[]'); return md.length > 0 && <div className="booking-detail-row"><span className="detail-label">Media:</span><span>{md.join(', ')}</span></div>; })()}
-            <div className="booking-card-actions">
-              <button
-                className="btn btn-success btn-sm"
-                onClick={() => approve(b.id)}
-                disabled={acting === b.id + '_app'}
-              >
-                {acting === b.id + '_app' ? <span className="spinner-inline" /> : '✅'} Approve
-              </button>
-              <button
-                className="btn btn-danger btn-sm"
-                onClick={() => reject(b.id, b.event_name)}
-                disabled={acting === b.id + '_rej'}
-              >
-                {acting === b.id + '_rej' ? <span className="spinner-inline" /> : '✕'} Reject
-              </button>
+              {b.purpose && (
+                <div className="booking-detail-row">
+                  <span className="detail-label">Purpose:</span>
+                  <span>{b.purpose}</span>
+                </div>
+              )}
+              {eq.length > 0 && (
+                <div className="booking-detail-row">
+                  <span className="detail-label">Equipment:</span>
+                  <span>{eq.join(', ')}</span>
+                </div>
+              )}
+              {md.length > 0 && (
+                <div className="booking-detail-row">
+                  <span className="detail-label">Media:</span>
+                  <span>{md.join(', ')}</span>
+                </div>
+              )}
+              <div className="booking-card-actions">
+                <button className="btn btn-success btn-sm" onClick={() => approve(b.id)} disabled={acting === b.id + '_app'}>
+                  {acting === b.id + '_app' ? <span className="spinner-inline" /> : '✅'} Approve
+                </button>
+                <button className="btn btn-danger btn-sm" onClick={() => reject(b.id, b.event_name)} disabled={acting === b.id + '_rej'}>
+                  {acting === b.id + '_rej' ? <span className="spinner-inline" /> : '✕'} Reject
+                </button>
+              </div>
             </div>
-          </div>
-        ))
+          );
+        })
       )}
     </div>
   );
