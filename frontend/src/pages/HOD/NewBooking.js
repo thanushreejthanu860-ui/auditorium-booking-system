@@ -5,7 +5,6 @@ import api from '../../utils/api';
 
 const EQUIPMENT = ['Microphone', 'Speakers', 'Projector', 'WiFi'];
 const MEDIA = ['Camera', 'Photography', 'Videography', 'Live Streaming'];
-
 const today = new Date().toISOString().split('T')[0];
 
 export default function NewBooking() {
@@ -65,7 +64,6 @@ export default function NewBooking() {
       <div className="page-header">
         <div><h2>➕ New Booking Request</h2><p>Submit a new auditorium booking</p></div>
       </div>
-
       <div className="card" style={{ maxWidth: 700 }}>
         <div className="card-body">
           <form onSubmit={handleSubmit}>
