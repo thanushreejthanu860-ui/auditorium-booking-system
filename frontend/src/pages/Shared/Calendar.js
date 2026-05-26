@@ -58,7 +58,6 @@ export default function Calendar() {
           </div>
           <div style={{ display: 'flex', gap: 12, fontSize: 12 }}>
             <span><span style={{ background: 'var(--primary)', color: '#fff', padding: '2px 8px', borderRadius: 4 }}>■</span> Event</span>
-            <span><span style={{ background: '#fde68a', color: '#92400e', padding: '2px 8px', borderRadius: 4 }}>■</span> Buffer (30 min)</span>
           </div>
         </div>
 
@@ -75,12 +74,6 @@ export default function Calendar() {
                     {dayEvents.map(ev => (
                       <div key={ev.id}>
                         <div
-                          className="event-block event-buffer"
-                          title={`Buffer: ${ev.buffer_start} – ${ev.start_time}`}
-                        >
-                          ⏱ {ev.buffer_start}
-                        </div>
-                        <div
                           className="event-block event-main"
                           title={ev.event_name}
                           onClick={(e) => {
@@ -91,12 +84,6 @@ export default function Calendar() {
                           <div>{ev.event_name}</div>
                           <div style={{ fontSize: 10, opacity: 0.85 }}>{ev.start_time} – {ev.end_time}</div>
                           {ev.department && <div style={{ fontSize: 10, opacity: 0.85 }}>{ev.department}</div>}
-                        </div>
-                        <div
-                          className="event-block event-buffer"
-                          title={`Buffer: ${ev.end_time} – ${ev.buffer_end}`}
-                        >
-                          ⏱ {ev.buffer_end}
                         </div>
                       </div>
                     ))}
