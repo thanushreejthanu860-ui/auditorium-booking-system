@@ -81,9 +81,9 @@ export default function Calendar() {
                             setPopup({ ev, x: rect.left, y: rect.bottom + 4 });
                           }}
                         >
+                          {ev.department && <div style={{ fontSize: 10, opacity: 0.85 }}>{ev.department}</div>}
                           <div>{ev.event_name}</div>
                           <div style={{ fontSize: 10, opacity: 0.85 }}>{ev.start_time} – {ev.end_time}</div>
-                          {ev.department && <div style={{ fontSize: 10, opacity: 0.85 }}>{ev.department}</div>}
                         </div>
                       </div>
                     ))}
