@@ -5,7 +5,9 @@ const { auth } = require('../middleware/auth');
 // GET /api/calendar
 router.get('/', auth, async (req, res) => {
   const [rows] = await pool.query(
-    `SELECT id, event_name, date, start_time, end_time FROM bookings WHERE status = 'approved' ORDER BY date, start_time`
+    `SELECT b.id, b.event_name, b.date, b.start_time, b.end_time, u.department
+     FROM bookings b JOIN users u ON b.hod_id = u.id
+     WHERE b.status = 'approved' ORDER BY b.date, b.start_time`
   );
 
   res.json(rows.map(b => {
