@@ -1,6 +1,7 @@
 import { useState } from 'react';
-import { useNavigate, Navigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
+import { Navigate } from 'react-router-dom';
 import api from '../../utils/api';
 import { setAuth, isAuthenticated } from '../../utils/auth';
 
@@ -8,7 +9,6 @@ export default function Login() {
   const navigate = useNavigate();
   const [form, setForm] = useState({ email: '', password: '' });
   const [loading, setLoading] = useState(false);
-  const [showPass, setShowPass] = useState(false);
 
   if (isAuthenticated()) return <Navigate to="/dashboard" replace />;
 
@@ -30,65 +30,41 @@ export default function Login() {
 
   return (
     <div className="login-page">
-      <div className="login-left">
-        <div className="login-left-content">
-          <div className="login-brand-icon">🏛️</div>
-          <h1 className="login-brand-title">Ratan Tata<br />Auditorium</h1>
-          <p className="login-brand-sub">Booking & Event Support System</p>
-          <div className="login-features">
-            <div className="login-feature-item">✦ Seamless booking management</div>
-            <div className="login-feature-item">✦ Multi-level approval workflow</div>
-            <div className="login-feature-item">✦ Real-time notifications</div>
-            <div className="login-feature-item">✦ LED display integration</div>
-          </div>
+      <div className="login-card">
+        <div className="login-logo">
+          <div className="logo-icon">🏛️</div>
+          <h1>Ratan Tata Auditorium</h1>
+          <p>Booking &amp; Event Support System</p>
         </div>
-      </div>
-
-      <div className="login-right">
-        <div className="login-card">
-          <div className="login-card-header">
-            <h2>Welcome back</h2>
-            <p>Sign in to your account to continue</p>
+        <form onSubmit={handleSubmit}>
+          <div className="form-group">
+            <label className="form-label">Email Address <span className="required">*</span></label>
+            <input
+              type="email"
+              className="form-control"
+              placeholder="you@college.edu"
+              value={form.email}
+              onChange={e => setForm(f => ({ ...f, email: e.target.value }))}
+              autoFocus
+            />
           </div>
-
-          <form onSubmit={handleSubmit} className="login-form">
-            <div className="login-field">
-              <label>Email Address</label>
-              <div className="login-input-wrap">
-                <span className="login-input-icon">✉</span>
-                <input
-                  type="email"
-                  placeholder="you@college.edu"
-                  value={form.email}
-                  onChange={e => setForm(f => ({ ...f, email: e.target.value }))}
-                  autoFocus
-                />
-              </div>
-            </div>
-
-            <div className="login-field">
-              <label>Password</label>
-              <div className="login-input-wrap">
-                <span className="login-input-icon">🔒</span>
-                <input
-                  type={showPass ? 'text' : 'password'}
-                  placeholder="••••••••"
-                  value={form.password}
-                  onChange={e => setForm(f => ({ ...f, password: e.target.value }))}
-                />
-                <button type="button" className="login-eye-btn" onClick={() => setShowPass(s => !s)}>
-                  {showPass ? '🙈' : '👁'}
-                </button>
-              </div>
-            </div>
-
-            <button type="submit" className="login-submit-btn" disabled={loading}>
-              {loading ? <><span className="spinner-inline" /> Signing in...</> : 'Sign In →'}
-            </button>
-          </form>
-
-          <p className="login-footer-note">Contact your administrator to get access.</p>
-        </div>
+          <div className="form-group">
+            <label className="form-label">Password <span className="required">*</span></label>
+            <input
+              type="password"
+              className="form-control"
+              placeholder="••••••••"
+              value={form.password}
+              onChange={e => setForm(f => ({ ...f, password: e.target.value }))}
+            />
+          </div>
+          <button type="submit" className="btn btn-primary" style={{ width: '100%', justifyContent: 'center', padding: '10px' }} disabled={loading}>
+            {loading ? <><span className="spinner-inline" /> Signing in...</> : 'Sign In'}
+          </button>
+        </form>
+        <p style={{ textAlign: 'center', marginTop: 16, fontSize: 12, color: 'var(--gray-400)' }}>
+          Contact your administrator to get access.
+        </p>
       </div>
     </div>
   );
