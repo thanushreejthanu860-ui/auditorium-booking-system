@@ -88,7 +88,9 @@ export default function Calendar() {
                             setPopup({ ev, x: rect.left, y: rect.bottom + 4 });
                           }}
                         >
-                          {ev.event_name}
+                          <div>{ev.event_name}</div>
+                          <div style={{ fontSize: 10, opacity: 0.85 }}>{ev.start_time} – {ev.end_time}</div>
+                          {ev.department && <div style={{ fontSize: 10, opacity: 0.85 }}>{ev.department}</div>}
                         </div>
                         <div
                           className="event-block event-buffer"
@@ -117,6 +119,7 @@ export default function Calendar() {
           <div style={{ fontSize: 13, color: 'var(--gray-600)' }}>
             <div>📅 {popup.ev.date}</div>
             <div>🕐 {popup.ev.start_time} – {popup.ev.end_time}</div>
+            {popup.ev.department && <div>🏢 {popup.ev.department}</div>}
             <div style={{ marginTop: 8, color: 'var(--warning)', fontSize: 12 }}>
               Buffer: {popup.ev.buffer_start} – {popup.ev.start_time} &amp; {popup.ev.end_time} – {popup.ev.buffer_end}
             </div>
