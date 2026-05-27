@@ -71,7 +71,7 @@ export default function Layout() {
         <div className="sidebar-footer">
           <div className="sidebar-user">
             <strong>{name}</strong>
-            {role}
+            <span className="sidebar-role">{role}</span>
           </div>
           <button className="btn-logout" onClick={logout}>Sign Out</button>
         </div>

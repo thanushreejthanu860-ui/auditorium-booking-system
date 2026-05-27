@@ -44,20 +44,23 @@ export default function Calendar() {
   if (loading) return <Spinner full />;
 
   return (
-    <div>
+    <div className="calendar-page">
       <div className="page-header">
-        <div><h2>📅 Auditorium Calendar</h2><p>Approved bookings with buffer zones</p></div>
+        <div>
+          <h2>📅 Auditorium Calendar</h2>
+          <p>Approved bookings with buffer zones</p>
+        </div>
       </div>
 
-      <div className="calendar-wrap">
+      <div className="calendar-container">
         <div className="calendar-header">
           <div className="calendar-nav">
-            <button onClick={prevMonth}>‹ Prev</button>
-            <strong style={{ fontSize: 16 }}>{current.toLocaleString('default', { month: 'long', year: 'numeric' })}</strong>
-            <button onClick={nextMonth}>Next ›</button>
+            <button onClick={prevMonth} className="nav-btn">‹ Prev</button>
+            <strong className="month-year">{current.toLocaleString('default', { month: 'long', year: 'numeric' })}</strong>
+            <button onClick={nextMonth} className="nav-btn">Next ›</button>
           </div>
-          <div style={{ display: 'flex', gap: 12, fontSize: 12 }}>
-            <span><span style={{ background: 'var(--primary)', color: '#fff', padding: '2px 8px', borderRadius: 4 }}>■</span> Event</span>
+          <div className="calendar-legend">
+            <span><span className="legend-color primary"></span> Event</span>
           </div>
         </div>
 
@@ -81,9 +84,9 @@ export default function Calendar() {
                             setPopup({ ev, x: rect.left, y: rect.bottom + 4 });
                           }}
                         >
-                          {ev.department && <div style={{ fontSize: 10, opacity: 0.85 }}>{ev.department}</div>}
-                          <div>{ev.event_name}</div>
-                          <div style={{ fontSize: 10, opacity: 0.85 }}>{ev.start_time} – {ev.end_time}</div>
+                          {ev.department && <div className="event-department">{ev.department}</div>}
+                          <div className="event-name">{ev.event_name}</div>
+                          <div className="event-time">{ev.start_time} – {ev.end_time}</div>
                         </div>
                       </div>
                     ))}
@@ -99,16 +102,30 @@ export default function Calendar() {
         <div
           ref={popupRef}
           className="event-popup"
-          style={{ top: Math.min(popup.y, window.innerHeight - 220), left: Math.min(popup.x, window.innerWidth - 320) }}
+          style={{ top: Math.min(popup.y, window.innerHeight - 240), left: Math.min(popup.x, window.innerWidth - 340) }}
         >
-          <button className="event-popup-close" onClick={() => setPopup(null)}>✕</button>
-          <h4>{popup.ev.event_name}</h4>
-          <div style={{ fontSize: 13, color: 'var(--gray-600)' }}>
-            <div>📅 {popup.ev.date}</div>
-            <div>🕐 {popup.ev.start_time} – {popup.ev.end_time}</div>
-            {popup.ev.department && <div>🏢 {popup.ev.department}</div>}
-            <div style={{ marginTop: 8, color: 'var(--warning)', fontSize: 12 }}>
-              Buffer: {popup.ev.buffer_start} – {popup.ev.start_time} &amp; {popup.ev.end_time} – {popup.ev.buffer_end}
+          <button className="popup-close" onClick={() => setPopup(null)}>✕</button>
+          <h4 className="popup-title">{popup.ev.event_name}</h4>
+          <div className="popup-content">
+            <div className="popup-row">
+              <span className="popup-label">📅 Date:</span>
+              <span className="popup-value">{popup.ev.date}</span>
+            </div>
+            <div className="popup-row">
+              <span className="popup-label">🕐 Time:</span>
+              <span className="popup-value">{popup.ev.start_time} – {popup.ev.end_time}</span>
+            </div>
+            {popup.ev.department && (
+              <div className="popup-row">
+                <span className="popup-label">🏢 Department:</span>
+                <span className="popup-value">{popup.ev.department}</span>
+              </div>
+            )}
+            <div className="popup-row">
+              <span className="popup-label">⚠️ Buffer:</span>
+              <span className="popup-value">
+                {popup.ev.buffer_start} – {popup.ev.start_time} &amp; {popup.ev.end_time} – {popup.ev.buffer_end}
+              </span>
             </div>
           </div>
         </div>
