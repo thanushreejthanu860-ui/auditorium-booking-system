@@ -112,7 +112,9 @@ const s = {
   },
   left: {
     width: '48%',
-    background: 'linear-gradient(160deg, #0f172a 0%, #1e293b 40%, #0f172a 100%)',
+    backgroundImage: 'url(https://i.pinimg.com/736x/08/35/9c/08359c52a0f863eff111e8aaf10e1677.jpg)',
+    backgroundSize: 'cover',
+    backgroundPosition: 'center',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
@@ -123,7 +125,7 @@ const s = {
   leftBg: {
     position: 'absolute',
     inset: 0,
-    background: 'radial-gradient(ellipse at 70% 20%, rgba(99,102,241,0.15) 0%, transparent 60%), radial-gradient(ellipse at 20% 80%, rgba(59,130,246,0.1) 0%, transparent 50%)',
+    background: 'rgba(0,0,0,0.55)',
     pointerEvents: 'none',
   },
   leftContent: {
