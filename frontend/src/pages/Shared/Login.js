@@ -1,7 +1,6 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Navigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
-import { Navigate } from 'react-router-dom';
 import api from '../../utils/api';
 import { setAuth, isAuthenticated } from '../../utils/auth';
 
@@ -34,9 +33,9 @@ export default function Login() {
         <div className="login-logo">
           <div className="logo-icon">🏛️</div>
           <h1>Ratan Tata Auditorium</h1>
-          <p>Booking & Event Support System</p>
+          <p>Booking &amp; Event Support System</p>
         </div>
-        <form onSubmit={handleSubmit} className="login-form">
+        <form onSubmit={handleSubmit}>
           <div className="form-group">
             <label className="form-label">Email Address <span className="required">*</span></label>
             <input
@@ -46,7 +45,6 @@ export default function Login() {
               value={form.email}
               onChange={e => setForm(f => ({ ...f, email: e.target.value }))}
               autoFocus
-              required
             />
           </div>
           <div className="form-group">
@@ -57,14 +55,13 @@ export default function Login() {
               placeholder="••••••••"
               value={form.password}
               onChange={e => setForm(f => ({ ...f, password: e.target.value }))}
-              required
             />
           </div>
-          <button type="submit" className="btn btn-primary w-100" disabled={loading}>
+          <button type="submit" className="btn btn-primary" style={{ width: '100%', justifyContent: 'center', padding: '10px' }} disabled={loading}>
             {loading ? <><span className="spinner-inline" /> Signing in...</> : 'Sign In'}
           </button>
         </form>
-        <p className="login-footer-text">
+        <p style={{ textAlign: 'center', marginTop: 16, fontSize: 12, color: 'var(--gray-400)' }}>
           Contact your administrator to get access.
         </p>
       </div>
